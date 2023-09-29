@@ -13,17 +13,18 @@ provider "aws" {
 }
 
 locals {
-  companylist = compact(split("\n", file("./companies")))
+  companylist = toset(split("\n", trim(file("./companies"), "\n")))
 }
 
 resource "aws_s3_bucket" "example" {
   for_each = local.companylist
-  bucket = "company-${each.value}"
+  bucket = "company-${each.key}"
 }
 
 
 resource "aws_s3_bucket_public_access_block" "example" {
-  bucket = aws_s3_bucket.example.id
+  for_each = local.companylist
+  bucket = aws_s3_bucket.example[each.key].id
   block_public_acls   = false
   block_public_policy = false
 }
