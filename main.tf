@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "example" {
-  for_each = file("companies")
+  for_each = toset(file("companies"))
   bucket = "company-${each.value}"
 }
 
