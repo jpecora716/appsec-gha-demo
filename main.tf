@@ -12,8 +12,12 @@ provider "aws" {
   region = "us-west-2"
 }
 
+locals {
+  companylist = compact(split("\n", file("./companies")))
+}
+
 resource "aws_s3_bucket" "example" {
-  for_each = toset(file("companies"))
+  for_each = local.companylist
   bucket = "company-${each.value}"
 }
 
