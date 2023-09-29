@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 locals {
-  companylist = toset(split("\n", trim(file("./companies"), "\n")))
+  companylist = toset(split("\n", trim(lower(file("./companies")), "\n")))
 }
 
 resource "aws_s3_bucket" "example" {
